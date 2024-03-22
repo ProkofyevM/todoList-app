@@ -1,77 +1,60 @@
 import { useEffect, useState, useRef } from 'react'
 import './App.css'
+import { ref, onValue, push, set, remove } from 'firebase/database'
+import { db } from './firebase'
 
 export const App = () => {
-	const [todoList, setTodolist] = useState([])
+	const [todoList, setTodolist] = useState({})
 	const [updateTodo, setUpdateTodo] = useState('')
 	const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 	const [refreshTodoFlag, setRefreshTodoFlag] = useState(false)
 	const [isSorted, setIsSorted] = useState(false)
 	const [isSearching, setIsSearching] = useState('')
 
-	const refreshTodos = () => {
-		setRefreshTodoFlag(!refreshTodoFlag)
-	}
+	//const refreshTodos = () => {
+	//	setRefreshTodoFlag(!refreshTodoFlag)
+	//}
 
 	const handleInputChange = ({ target }) => {
 		setIsButtonDisabled(target.value === '' ? true : false)
 	}
 
 	useEffect(() => {
-		fetch('http://localhost:3007/todos')
-			.then((rawResponse) => rawResponse.json())
-			.then((response) => {
-				setTodolist(response)
-			})
-	}, [refreshTodoFlag])
+		const todosDbRef = ref(db, 'todos')
+
+		return onValue(todosDbRef, (snapshot) => {
+			const loadedTodos = snapshot.val() || {}
+
+			setTodolist(loadedTodos)
+		})
+	}, [])
 
 	const requestPostTodo = ({ target }) => {
-		fetch('http://localhost:3007/todos', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				title: target.todo.value,
-			}),
+		const todosDbRef = ref(db, 'todos')
+
+		push(todosDbRef, {
+			title: target.todo.value,
 		})
-			.then((rawResponse) => rawResponse.json())
-			.then((response) => {
-				setTodolist([...todoList], response)
-			})
 	}
 
 	const requestUpdatingTodo = (id) => {
-		fetch(`http://localhost:3007/todos/${id}`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({ title: updateTodo }),
-		})
-			.then((rawResponse) => {
-				rawResponse.json()
-			})
-			.then(() => {
-				setTodolist(
-					todoList.map((todo) =>
-						todo.id === id ? { ...todo, title: updateTodo } : todo,
-					),
-				)
-				refreshTodos()
-			})
+		const todosDbRef = ref(db, `todos/${id}`)
+
+		set(todosDbRef, { title: updateTodo })
 	}
 
-	const deleteTodo = ({ target }) => {
-		fetch(`http://localhost:3007/todos/${target.name}`, {
-			method: 'DELETE',
-		})
-			.then((rawResponse) => rawResponse.json())
-			.then((response) => {
-				setTodolist([...todoList], response)
-				refreshTodos()
-			})
+	const deleteTodo = (id) => {
+		console.log(id)
+		const todosDbRef = ref(db, `todos/${id}`)
+
+		remove(todosDbRef)
 	}
 
 	const sortedTodos = () => {
 		setIsSorted(!isSorted)
-		const sortedTodos = todoList.sort((a, b) => a.title.localeCompare(b.title))
+		const sortedTodos = Object.values(todoList).sort((a, b) =>
+			a.title.localeCompare(b.title),
+		)
 		setTodolist(sortedTodos)
 	}
 
@@ -97,14 +80,15 @@ export const App = () => {
 				</button>
 			</form>
 			<input
+				value={isSearching}
 				className="inpSearch"
 				placeholder="Поиск...."
 				onChange={searchTodo}
 			></input>
 			<ul>
-				{todoList
-					.filter((todo) => todo.title.includes(isSearching))
-					.map(({ id, title }) => (
+				{Object.entries(todoList)
+					.filter(([id, todo]) => todo.title.includes(isSearching))
+					.map(([id, { title }]) => (
 						<li key={id} className="item">
 							{!refreshTodoFlag ? (
 								<input
@@ -119,13 +103,12 @@ export const App = () => {
 							)}
 
 							<button
-								name={id}
 								className="btnEdit"
 								onClick={() => requestUpdatingTodo(id)}
 							>
 								Изменить
 							</button>
-							<button name={id} className="btnDel" onClick={deleteTodo}>
+							<button className="btnDel" onClick={() => deleteTodo(id)}>
 								Удалить
 							</button>
 						</li>
