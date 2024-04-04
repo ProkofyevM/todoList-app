@@ -3,7 +3,7 @@
 	flex-direction: column;
 	align-items: center;
 	font-family: Courier New, monospace;
-  font-size: 16px;
+	font-size: 16px;
 	margin-top: 10px;
 }
 
@@ -41,13 +41,16 @@
 }
 
 .inpEdit {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	width: 100%;
 	background-image: -webkit-linear-gradient(
 		left,
 		rgb(181, 181, 182),
 		rgb(181, 181, 182)
 	);
-  font-family: Courier New, monospace;
+	font-family: Courier New, monospace;
 	border: none;
 }
 
@@ -61,6 +64,19 @@
 	-webkit-border-radius: 15px;
 	background-color: #3b4148;
 	color: #dbddde;
+}
+
+.spanTodo {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-image: -webkit-linear-gradient(
+		left,
+		rgb(181, 181, 182),
+		rgb(181, 181, 182)
+	);
+	font-family: Courier New, monospace;
+	border: none;
 }
 
 .btnAdd {
@@ -107,13 +123,12 @@ li {
 }
 
 .btnEdit {
-	margin-left: 30%;
-	margin-right: 30px;
-	height: 17px;
 	width: 80px;
+	height: 30px;
+	margin-top: 2px;
 	background-color: #3b4148;
 	border: none;
-	border-radius: 5px;
+	border-radius: 10px;
 	color: whitesmoke;
 	cursor: pointer;
 	position: relative;
@@ -121,9 +136,25 @@ li {
 
 .btnDel {
 	width: 80px;
+	height: 30px;
+	margin-top: 2px;
+	margin-left: 5px;
 	background-color: #ea4c88;
 	border: none;
-	border-radius: 5px;
+	border-radius: 10px;
+	color: whitesmoke;
+	cursor: pointer;
+	position: relative;
+}
+
+.btnBack {
+	width: 80px;
+	height: 30px;
+	margin-top: 2px;
+	margin-left: 5px;
+	background-color: #38ba77;
+	border: none;
+	border-radius: 10px;
 	color: whitesmoke;
 	cursor: pointer;
 	position: relative;
