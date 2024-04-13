@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import './App.css'
-import { FormTodo } from './Components/FormTodo'
-import { SearchTodo } from './Components/SearchTodo'
-import { ListTodo } from './Components/ListTodo'
-import { PageTodo } from './Components/PageTodo'
+import { FormTodo } from './Components/form-todo'
+import { SearchTodo } from './Components/search-todo'
+import { ListTodo } from './Components/list-todo'
+import { PageTodo } from './Components/page-todo'
+import { AppContextProvider } from './app-context-provider'
+//import { AppContext } from './app-context'
 
 export const App = () => {
 	const [todoList, setTodolist] = useState([])
@@ -63,8 +65,8 @@ export const App = () => {
 			})
 	}
 
-	const deleteTodo = ({ target }) => {
-		fetch(`http://localhost:3005/todos/${target.name}`, {
+	const deleteTodo = (event) => {
+		fetch(`http://localhost:3005/todos/${event.target.name}`, {
 			method: 'DELETE',
 		})
 			.then((rawResponse) => rawResponse.json())
@@ -112,13 +114,14 @@ export const App = () => {
 				<Route
 					path="/task/:id"
 					element={
-						<PageTodo
+						<AppContextProvider
 							requestUpdatingTodo={requestUpdatingTodo}
-							todoList={todoList}
 							deleteTodo={deleteTodo}
+							refreshTodoFlag={refreshTodoFlag}
 							setUpdateTodo={setUpdateTodo}
-							refreshTodoFlag={setUpdateTodo}
-						/>
+						>
+							<PageTodo todoList={todoList} />
+						</AppContextProvider>
 					}
 				/>
 			</Routes>

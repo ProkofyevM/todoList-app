@@ -1,13 +1,16 @@
-import React from 'react'
+//import React, { useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import '../App.css'
+import { LiTodo } from './li-todo-component'
+//import { DeleteBtn } from './delete-button'
+//import { AppContext } from '../app-context'
 
 export const PageTodo = ({
 	todoList,
-	requestUpdatingTodo,
-	deleteTodo,
-	refreshTodoFlag,
-	setUpdateTodo,
+	//requestUpdatingTodo,
+	//deleteTodo,
+	//refreshTodoFlag,
+	//setUpdateTodo,
 }) => {
 	const params = useParams()
 	const navigate = useNavigate()
@@ -23,7 +26,8 @@ export const PageTodo = ({
 		<>
 			{selectedTodo ? (
 				<>
-					<li k className="item">
+					<LiTodo selectedTodo={selectedTodo} />
+					{/*<li className="item">
 						{refreshTodoFlag ? (
 							<input
 								className="inpEdit"
@@ -50,7 +54,7 @@ export const PageTodo = ({
 						>
 							Удалить
 						</button>
-					</li>
+					</li>*/}
 				</>
 			) : (
 				<p>Task not found</p>
