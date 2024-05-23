@@ -35,7 +35,6 @@ export const PageTodo = () => {
 	const selectedTodo = todoList.find((todo) => todo.id === Number(params.id))
 
 	return (
-    
 		<>
 			{selectedTodo ? (
 				<>
