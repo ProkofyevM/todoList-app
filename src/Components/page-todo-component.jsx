@@ -2,8 +2,8 @@ import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import '../App.css'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectTodoList, selectRefreshTodoFlag, selectUpdateTodo } from './../selectors'
-import { updateTodoAction, deletedTodoAction } from '../actions/'
+import { selectTodoList, selectRefreshTodoFlag, selectUpdateTodo } from '../selectors'
+import { updateTodoAction, deletedTodoAction } from '../actions'
 
 export const PageTodo = () => {
 	const dispatch = useDispatch()

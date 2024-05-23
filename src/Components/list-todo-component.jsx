@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { selectSearching, selectTodoList } from './../selectors'
+import { selectSearching, selectTodoList } from '../selectors'
 import { useSelector } from 'react-redux'
 
 export const ListTodo = () => {
