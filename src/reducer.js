@@ -3,7 +3,6 @@ const initialState = {
 		todoList: [],
 		updateTodo: '',
 		isButtonDisabled: true,
-		refreshTodoFlag: false,
 		isSorted: false,
 		isSearching: '',
 	},
@@ -15,35 +14,49 @@ export const reducer = (state = initialState, action) => {
 		case 'TODO_LIST':
 			return {
 				...state,
-				todoList: [...state.todoList, payload],
+				todo: {
+					...state.todo,
+					todoList: [...state.todo.todoList, payload],
+					updateTodo: '',
+				},
 			}
-		case 'UPDATE_TODO':
-      console.log('UPDATE_TODO action dispatched:', action.payload)
+		case 'DELETE_TODO':
 			return {
 				...state,
-				updateTodo: payload,
+				todo: {
+					...state.todo,
+					todoList: state.todo.todoList.filter((todo) => todo.id !== payload),
+				},
+			}
+		case 'UPDATE_TODO':
+			return {
+				...state.todo,
+				todo: {
+					...state.todo,
+					updateTodo: payload,
+				},
 			}
 		case 'BUTTON_DISABLED':
 			return {
 				...state,
 				isButtonDisabled: payload,
 			}
-		case 'REFRESH_TODO_FLAG':
-			return {
-				...state,
-				refreshTodoFlag: !state.refreshTodoFlag,
-			}
-		case 'SORTED_TODO_LIST':
-			return { ...state, todoList: payload, isSorted: true }
+
 		case 'IS_SORTED':
 			return {
 				...state,
-				isSorted: !state.isSorted,
+				todo: {
+					...state.todo,
+					todoList: payload,
+				},
 			}
 		case 'IS_SEARCHING':
 			return {
 				...state,
-				isSearching: payload,
+				todo: {
+					...state.todo,
+					isSearching: payload,
+				},
 			}
 		default:
 			return state

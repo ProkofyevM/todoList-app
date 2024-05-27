@@ -2,37 +2,30 @@ import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import '../App.css'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectTodoList, selectRefreshTodoFlag, selectUpdateTodo } from '../selectors'
+import { selectTodoList, selectUpdateTodo } from '../selectors'
 import { updateTodoAction, deletedTodoAction } from '../actions'
 
 export const PageTodo = () => {
 	const dispatch = useDispatch()
 	const todoList = useSelector(selectTodoList)
 	const updateTodo = useSelector(selectUpdateTodo)
-	const refreshTodoFlag = useSelector(selectRefreshTodoFlag)
 
 	const params = useParams()
 	const navigate = useNavigate()
 
-	//const displayTodo = (id) => {
-	//	return todoList.find((todo) =>
-	//		todo.id === id ? { ...todo, title: updateTodo } : todo,
-	//	)
-	//}
+	const selectedTodo = todoList.find((todo) => todo.id === Number(params.id))
 
 	const requestUpdatingTodo = (id) => {
 		dispatch(updateTodoAction(id, updateTodo))
 	}
 
-	const deleteTodo = ({ target }) => {
-		dispatch(deletedTodoAction({ target }))
+	const deleteTodo = () => {
+		dispatch(deletedTodoAction(selectedTodo.id))
 	}
 
 	const handleClick = () => {
 		navigate(-1)
 	}
-
-	const selectedTodo = todoList.find((todo) => todo.id === Number(params.id))
 
 	return (
 		<>
@@ -43,7 +36,6 @@ export const PageTodo = () => {
 							className="inpEdit"
 							type="text"
 							defaultValue={selectedTodo.title}
-							disabled={refreshTodoFlag}
 							onChange={({ target }) =>
 								dispatch({
 									type: 'UPDATE_TODO',

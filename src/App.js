@@ -1,9 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import { FormTodo } from './components/form-todo-component.jsx'
-import { SearchTodo } from './components/search-todo-component.jsx'
-import { ListTodo } from './components/list-todo-component.jsx'
-import { PageTodo } from './components/page-todo-component.jsx'
+import { SearchTodo } from './components'
+import { ListTodo } from './components'
+import { PageTodo } from './components'
 
 export const App = () => {
 	return (

@@ -1,26 +1,25 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectButtonDisable, selectTodoList } from './../selectors'
+import { selectButtonDisable, selectUpdateTodo, selectTodoList } from './../selectors'
 import { addTodoAction, sortTodoAction } from '../actions'
-import { useNavigate } from 'react-router-dom'
 
 export const FormTodo = () => {
 	const dispatch = useDispatch()
-	const navigate = useNavigate()
 
 	const isButtonDisabled = useSelector(selectButtonDisable)
+	const updateTodo = useSelector(selectUpdateTodo)
 	const todoList = useSelector(selectTodoList)
 
 	const handleInputChange = ({ target }) => {
 		dispatch({ type: 'BUTTON_DISABLED', payload: target.value === '' })
+		dispatch({ type: 'UPDATE_TODO', payload: target.value })
 	}
 
-	const requestPostTodo = ({ target }) => {
-		const todoValue = target.elements.todo.value
-		console.log(todoValue)
+	const requestPostTodo = (event) => {
+		event.preventDefault()
+		const todoValue = event.target.elements.todo.value
 		dispatch(addTodoAction(todoValue))
-		navigate('/')
-		console.log('Navigating to /')
+		dispatch({ type: 'UPDATE_TODO' })
 	}
 
 	const sortedTodos = () => {
@@ -35,6 +34,7 @@ export const FormTodo = () => {
 					className="input"
 					placeholder="Введите задачу...."
 					type="text"
+					value={updateTodo}
 					onChange={handleInputChange}
 				></input>
 				<button type="submit" className="btnAdd" disabled={!isButtonDisabled}>

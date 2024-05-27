@@ -1,12 +1,10 @@
-export const deletedTodoAction = ({ target }) => {
+export const deletedTodoAction = (id) => {
 	return async (dispatch) => {
 		try {
-			const response = await fetch(`http://localhost:3005/todos/${target.name}`, {
+			await fetch(`http://localhost:3005/todos/${id}`, {
 				method: 'DELETE',
 			})
-			const data = response.json()
-			dispatch({ type: 'TODO_LIST', payload: data })
-			dispatch({ type: 'REFRESH_TODO_FLAG' })
+			dispatch({ type: 'DELETE_TODO', payload: id })
 		} catch (error) {
 			console.error('Error deleting todo:', error)
 		}

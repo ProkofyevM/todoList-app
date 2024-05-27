@@ -7,11 +7,12 @@ export const ListTodo = () => {
 	const todoList = useSelector(selectTodoList)
 	const isSearching = useSelector(selectSearching)
 
+	const filteredTodos = todoList ? todoList.filter(todo => todo.title.includes(isSearching)) : []
+
 	return (
 		<>
 			<ul>
-				{todoList
-					.filter((todo) => todo.title.includes(isSearching))
+				{filteredTodos
 					.map(({ id, title }) => (
 						<li key={id} className="item">
 							<Link to={`/task/${id}`} className="inpEdit">
